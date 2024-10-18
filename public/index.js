@@ -80,16 +80,32 @@ async function createNoteStart() {
   window.location.href = '/authorize';
 }
 
+function getCurrentStartDate() {
+  const now = new Date();
+  return now.toISOString().slice(0, 19) + '+0000';
+}
+
+
 async function createNoteMaybe() {
   const tokenData = await getToken();
   const token = tokenData.access_token;
 
+  let titleArr = [];
+  let textArr = [];
+  const buttons = [...document.querySelectorAll('.btn-check:checked')].forEach((btn) => {
+    const label = document.querySelector("label[for=" + btn.id + "]")
+    const emojis = label.dataset.emojis;
+
+    titleArr.push(emojis);
+    textArr.push(label.textContent)
+  })
+
   const taskData = {
-    title: 'test 😁',
-    content: 'test task',
-    tags: ['test'],
-    list: 'Test List',
-    startDate: new Date().toISOString()
+    title: titleArr.join(""),
+    content: textArr.join("\n"),
+    tags: ['moo'],
+    list: 'Moo',
+    startDate: getCurrentStartDate()
   };
 
   const response = await fetch('/task', {
