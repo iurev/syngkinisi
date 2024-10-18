@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const clientSecret = 'LZL$8Y$7zhR2s+2x*&I787qu$Bs4Rbm(';
 const clientId = 'PrD4niU8Npk4l3C5Bn';
-const redirectUri = 'https://supreme-enigma-6r67xw54g62xq9j-8080.app.github.dev/';
+const redirectUri = 'https://syngkinisi.onrender.com/';
 
 const apiBase = 'https://api.ticktick.com/open/v1';
 
