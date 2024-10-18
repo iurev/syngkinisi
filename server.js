@@ -51,8 +51,11 @@ app.post('/task', async (req, res) => {
         'Content-Type': 'application/json'
       }
     });
+    console.error(response.data);
     res.json(response.data);
   } catch (error) {
+    console.error(error);
+
     res.status(500).json({ error: error.message });
   }
 });
