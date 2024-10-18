@@ -133,5 +133,5 @@ container.addEventListener("click", () => {
     createNote(); 
 })
 
-createNote();   
+// createNote();   
 
