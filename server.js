@@ -9,10 +9,10 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 const port = process.env.PORT || 3001;
+const clientSecret = process.env.CLIENT_SECRET || 'LZL$8Y$7zhR2s+2x*&I787qu$Bs4Rbm(';
+const redirectUri = process.env.REDIRECT_URI || "https://supreme-enigma-6r67xw54g62xq9j-3001.app.github.dev/";
+const clientId = process.env.CLIENT_ID || 'PrD4niU8Npk4l3C5Bn';
 
-const clientSecret = 'LZL$8Y$7zhR2s+2x*&I787qu$Bs4Rbm(';
-const clientId = 'PrD4niU8Npk4l3C5Bn';
-const redirectUri = 'https://syngkinisi.onrender.com/';
 const apiBase = 'https://api.ticktick.com/open/v1';
 
 // Endpoint to handle authorization
