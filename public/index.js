@@ -31,6 +31,7 @@ function updateEmojis() {
   if (selectedEmotions.length === 0) {
       selectedEmotions = ["default"];
   }
+  localStorage.setItem("emotions", selectedEmotions);
 
   const containerRect = container.getBoundingClientRect();
   const centerX = containerRect.width / 2;
@@ -56,17 +57,13 @@ function updateEmojis() {
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  updateEmojis();
-})
-
 const container = document.getElementById('emoji-container');
 
 async function getToken() {
   const urlParams = new URLSearchParams(window.location.search);
   const code = urlParams.get('code');
   if (!code) {
-      window.location.href = '/authorize';
+      return;
   }
   
   const response = await fetch('/auth/token', {
@@ -79,7 +76,11 @@ async function getToken() {
   return response.json();
 }
 
-async function createNote() {
+async function createNoteStart() {
+  window.location.href = '/authorize';
+}
+
+async function createNoteMaybe() {
   const tokenData = await getToken();
   const token = tokenData.access_token;
 
@@ -101,11 +102,27 @@ async function createNote() {
 
   if (response.ok) {
     console.log('Task created successfully');
+    localStorage.setItem("emotions", []);
+
+    window.location.href = "/";
   } else {
     console.error('Failed to create task');
   }
 }
 
 container.addEventListener("click", () => {
-  createNote();
+  createNoteStart();
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const emotions = localStorage.getItem("emotions");
+  console.log(emotions);
+  [...document.querySelectorAll('.btn-check')].forEach((btn) => {
+    if (emotions.split(",").indexOf(btn.id) != -1) {
+      btn.setAttribute("checked", "true");
+    }
+  })
+
+  updateEmojis();
+  createNoteMaybe();
+})
