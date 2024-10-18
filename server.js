@@ -8,6 +8,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+const port = process.env.PORT || 3001;
+
+
 app.post('/proxy/token', async (req, res) => {
   try {
     const response = await axios.post('https://ticktick.com/oauth/token', req.body, {
@@ -23,4 +26,4 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.listen(3000, () => console.log('Server running on port 3000'));
+app.listen(port, () => console.log(`Server running on port ${port}`));
