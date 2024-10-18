@@ -10,11 +10,46 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const port = process.env.PORT || 3001;
 
+const clientSecret = 'LZL$8Y$7zhR2s+2x*&I787qu$Bs4Rbm(';
+const clientId = 'PrD4niU8Npk4l3C5Bn';
+const redirectUri = 'https://syngkinisi.onrender.com/';
+const apiBase = 'https://api.ticktick.com/open/v1';
 
-app.post('/proxy/token', async (req, res) => {
+// Endpoint to handle authorization
+app.get('/authorize', (req, res) => {
+  const authUrl = `https://ticktick.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`;
+  res.redirect(authUrl);
+});
+
+// Endpoint to get the token
+app.post('/auth/token', async (req, res) => {
+  const { code } = req.body;
   try {
-    const response = await axios.post('https://ticktick.com/oauth/token', req.body, {
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    const response = await axios.post('https://ticktick.com/oauth/token', null, {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      params: {
+        grant_type: 'authorization_code',
+        client_id: clientId,
+        client_secret: clientSecret,
+        code: code,
+        redirect_uri: redirectUri
+      }
+    });
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Endpoint to create a task
+app.post('/task', async (req, res) => {
+  const { token, taskData } = req.body;
+  try {
+    const response = await axios.post(`${apiBase}/task`, taskData, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
     });
     res.json(response.data);
   } catch (error) {
